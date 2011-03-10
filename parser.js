@@ -97,20 +97,19 @@
 
 	/* Extend load() function to automagically compile .coffee files into JavaScript */
 	this.load = (function (load) {
+		var self = this;
 		return function (file) {
 			if (/\.coffee$/.test(file)) {
 				try {
-					eval(CoffeeScript.compile(readFile(file)));
+					eval.apply(self, [CoffeeScript.compile(readFile(file))]);
 				} catch (e) {
 					if (!CoffeeScript.quiet) {
 						print('CoffeeScript Error in file (' + file + '): ' + e.message);
 					}
 				}
 			} else {
-				load(file);
+				load.apply(self, [file]);
 			}
-		}.bind(this);
-	}(this.load));
-
-
+		};
+	}(load));
 }());
