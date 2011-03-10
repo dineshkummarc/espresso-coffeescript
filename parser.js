@@ -93,4 +93,18 @@
 			return func;
 		};
 	}(HTTPViewParser.parse));
+
+
+	/* Extend load() function to automagically compile .coffee files into JavaScript */
+	this.load = (function (load) {
+		return function (file) {
+			if (/\.coffee$/.test(file)) {
+				eval(CoffeeScript.compile(readFile(file)));
+			} else {
+				load(file);
+			}
+		}.bind(this);
+	}(this.load));
+
+
 }());
