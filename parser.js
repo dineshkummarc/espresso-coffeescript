@@ -99,7 +99,13 @@
 	this.load = (function (load) {
 		return function (file) {
 			if (/\.coffee$/.test(file)) {
-				eval(CoffeeScript.compile(readFile(file)));
+				try {
+					eval(CoffeeScript.compile(readFile(file)));
+				} catch (e) {
+					if (!CoffeeScript.quiet) {
+						print('CoffeeScript Error in file (' + file + '): ' + e.message);
+					}
+				}
 			} else {
 				load(file);
 			}
